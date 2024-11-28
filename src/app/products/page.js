@@ -122,13 +122,11 @@ export const columns = [
         accessorKey: "edit",
         header: "Editar",
         cell: ({ row }) => (
-            <div className="capitalize"><Edit /></div>
+            <Link href={'/products/edit/' + row.original.id}>
+                <div className="capitalize"><Edit /></div>
+            </Link>
         ),
     },
-
-
-
-
 ]
 
 export default function Products() {
