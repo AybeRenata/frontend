@@ -125,13 +125,7 @@ export const columns = [
             <div className="capitalize"><Edit /></div>
         ),
     },
-    {
-        accessorKey: "delete",
-        header: "Eliminar",
-        cell: ({ row }) => (
-            <div className="flex justify-center"><Trash /></div>
-        ),
-    },
+
 
 
 
@@ -148,14 +142,28 @@ export default function Products() {
         React.useState({})
     const [rowSelection, setRowSelection] = React.useState({})
 
+    const deleteProduct = async (id) => {
+        axios.delete('https://backend-zhls.onrender.com/products/' + id).then((e) => { setData(data.filter(doc => doc.id !== id)); setLoading(false) })
+    }
+
     React.useEffect(() => {
         setLoading(true)
         axios.get('https://backend-zhls.onrender.com/products').then((e) => { setData(e.data); setLoading(false) })
     }, [])
 
+    const deleteColumn = {
+        accessorKey: "delete",
+        header: "Eliminar",
+        cell: ({ row }) => (
+            <div onClick={() => deleteProduct(row.original.id)} className="flex justify-center">
+                <Trash />
+            </div>
+        ),
+    }
+
     const table = useReactTable({
         data,
-        columns,
+        columns: [...columns, deleteColumn],
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
