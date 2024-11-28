@@ -140,7 +140,7 @@ export default function Products() {
         accessorKey: "delete",
         header: "Eliminar",
         cell: ({ row }) => (
-            <div onClick={() => deleteProduct(row.original.id)} className="flex justify-center">
+            <div onClick={() => deleteProduct(row.original.id)} className="cursor-pointer flex justify-center">
                 <Trash />
             </div>
         ),

@@ -37,16 +37,28 @@ const formSchema = z.object({
     name: z.string(),
     description: z.string(),
     brand: z.string(),
-    category: z.string(),
-    price: z.string(),
-    stock: z.string()
+    spec: z.string().nullable().optional(),
+    price: z
+        .string()
+        .transform((val) => parseFloat(val))
+        .refine((val) => !isNaN(val), { message: "El precio debe ser un número válido" }),
+    stock: z
+        .string()
+        .transform((val) => parseInt(val, 10))
+        .refine((val) => !isNaN(val), { message: "El stock debe ser un número válido" }),
 });
-
 export default function AddProduct() {
 
     const form = useForm({
         resolver: zodResolver(formSchema),
-
+        defaultValues: {
+            name: "",
+            description: "",
+            brand: "",
+            spec: "",
+            price: "",
+            stock: "",
+        },
     })
 
     async function onSubmit(values) {
@@ -54,6 +66,7 @@ export default function AddProduct() {
             await axios.post('https://backend-zhls.onrender.com/products', {
                 ...values
             })
+            form.reset()
             toast.success('Creado correctamente')
 
         } catch (error) {
@@ -62,9 +75,14 @@ export default function AddProduct() {
         }
     }
 
+
+
+
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+                <h1>Agrega tus productos</h1>
                 <Toaster />
                 <FormField
                     control={form.control}
@@ -125,7 +143,7 @@ export default function AddProduct() {
 
                 <FormField
                     control={form.control}
-                    name="category"
+                    name="spec"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Categoria</FormLabel>
@@ -152,7 +170,7 @@ export default function AddProduct() {
                                 <Input
                                     placeholder=""
 
-                                    type=""
+                                    type="number"
                                     {...field} />
                             </FormControl>
 
@@ -171,7 +189,8 @@ export default function AddProduct() {
                                 <Input
                                     placeholder=""
 
-                                    type=""
+                                    type="number"
+
                                     {...field} />
                             </FormControl>
 
