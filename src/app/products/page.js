@@ -2,10 +2,6 @@
 
 import * as React from "react"
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -13,20 +9,10 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, Delete, DeleteIcon, Edit, MoreHorizontal, Trash } from "lucide-react"
+import { Edit, Trash } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+
 import {
     Table,
     TableBody,
@@ -37,6 +23,7 @@ import {
 } from "@/components/ui/table"
 import Link from "next/link"
 import axios from "axios"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const data = [
     {
@@ -177,12 +164,21 @@ export default function Products() {
             rowSelection,
         },
     })
+    console.log(data)
 
     return (
         <div className="w-full">
-            <div className="flex items-center py-4">
+            <div className="flex justify-between items-center py-4">
                 <Link href="/products/add"><Button> Agregar producto</Button></Link>
-
+                <Select onValueChange={value => setSorting([{ id: 'price', desc: value === 'max' }])}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Ordenar" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="min">Menor precio</SelectItem>
+                        <SelectItem value="max">Mayor precio</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
             <div className="rounded-md border">
                 <Table>
