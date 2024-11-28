@@ -2,6 +2,6 @@
 export default function Home() {
 
   return (
-    <>home</>
+    <>¡Te damos la bienvenida a tu panel de control!</>
   )
 }
