@@ -52,14 +52,17 @@ const formSchema = z.object({
 });
 
 export default function EditProduct() {
+    const [loading, setLoading] = useState(true)
     const params = useParams()
     const form = useForm({
         resolver: zodResolver(formSchema),
     })
 
     useEffect(() => {
+        setLoading(true)
         axios.get('https://backend-zhls.onrender.com/products/' + params.id).then(e => {
             form.reset({ ...e.data, price: String(e.data.price), stock: String(e.data.stock) })
+            setLoading(false)
         })
 
         return () => { }
@@ -70,133 +73,138 @@ export default function EditProduct() {
 
     async function onSubmit(values) {
         try {
-            console.log(values)
+            setLoading(true)
             await axios.put('https://backend-zhls.onrender.com/products/' + params.id, {
                 ...values
             })
+            setLoading(false)
             toast.success('Editado correctamente')
-
         } catch (error) {
             console.error("Form submission error", error);
             toast.error("Failed to submit the form. Please try again.");
         }
     }
 
+
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
-                <Toaster />
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Nombre del producto</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder=""
-                                    type=""
-                                    {...field} />
-                            </FormControl>
+        <>
+            <Toaster />
+            {loading ? <p>cargando...</p> : null}
+            {loading === false && <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Nombre del producto</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder=""
+                                        type=""
+                                        {...field} />
+                                </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Descripcion</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder=""
-                                    type=""
-                                    {...field} />
-                            </FormControl>
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Descripcion</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder=""
+                                        type=""
+                                        {...field} />
+                                </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="brand"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Marca</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder=""
-                                    type=""
-                                    {...field} />
-                            </FormControl>
+                    <FormField
+                        control={form.control}
+                        name="brand"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Marca</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder=""
+                                        type=""
+                                        {...field} />
+                                </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="spec"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Categoria</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder=""
-                                    type=""
-                                    {...field} />
-                            </FormControl>
+                    <FormField
+                        control={form.control}
+                        name="spec"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Categoria</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder=""
+                                        type=""
+                                        {...field} />
+                                </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Precio</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder=""
-                                    {...field}
-                                    type="number"
+                    <FormField
+                        control={form.control}
+                        name="price"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Precio</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder=""
+                                        {...field}
+                                        type="number"
 
-                                />
-                            </FormControl>
+                                    />
+                                </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="stock"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Stock</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder=""
-                                    type="number"
-                                    {...field} />
-                            </FormControl>
+                    <FormField
+                        control={form.control}
+                        name="stock"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Stock</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder=""
+                                        type="number"
+                                        {...field} />
+                                </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">Editar</Button>
-            </form>
-        </Form>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit">Editar</Button>
+                </form>
+            </Form>}
+        </>
+
     )
 }
