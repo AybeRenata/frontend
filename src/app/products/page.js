@@ -25,40 +25,6 @@ import Link from "next/link"
 import axios from "axios"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-const data = [
-    {
-        id: "m5gr84i9",
-        amount: 316,
-        status: "success",
-        email: "ken99@yahoo.com",
-    },
-    {
-        id: "3u1reuv4",
-        amount: 242,
-        status: "success",
-        email: "Abe45@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        amount: 837,
-        status: "processing",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        amount: 874,
-        status: "success",
-        email: "Silas22@gmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        amount: 721,
-        status: "failed",
-        email: "carmella@hotmail.com",
-    },
-]
-
-
 
 export const columns = [
 
@@ -131,9 +97,10 @@ export default function Products() {
         axios.delete('https://backend-zhls.onrender.com/products/' + id).then((e) => { setData(data.filter(doc => doc.id !== id)); setLoading(false) })
     }
 
+    // trae los productos de una tienda
     React.useEffect(() => {
         setLoading(true)
-        axios.get('https://backend-zhls.onrender.com/products').then((e) => { setData(e.data); setLoading(false) })
+        axios.get('https://backend-zhls.onrender.com/products?store_id=' + 1).then((e) => { setData(e.data); setLoading(false) })
     }, [])
 
     const deleteColumn = {
